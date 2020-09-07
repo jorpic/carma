@@ -24,6 +24,7 @@ module.exports =
     vendor3:   path.join SRC_DIR, "entryPoints", "vendor3"
     carma:     path.join SRC_DIR, "entryPoints", "main"
     resources: path.join SRC_DIR, "entryPoints", "resources"
+    sandbox:   path.join SRC_DIR, "entryPoints", "sandbox"
 
   node:
     __filename: true

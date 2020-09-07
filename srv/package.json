@@ -19,12 +19,14 @@
     "_build-backend-templates-index": "npm run pug -- -O ./frontend.data.json resources/assets/template/backendPages/index.pug --extension=tpl --out resources/static/build/backendPages --pretty",
     "_build-backend-templates-login": "npm run pug -- -O ./frontend.data.json resources/assets/template/backendPages/login.pug --extension=html --out resources/static/build/backendPages --pretty",
     "_build-backend-templates-pure": "npm run pug -- -O ./frontend.data.json resources/assets/template/backendPages/pure.pug --extension=html --out resources/static/build/backendPages --pretty",
-    "build-backend-templates": "npm run _build-backend-templates-index && npm run _build-backend-templates-login && npm run _build-backend-templates-pure",
+    "_build-backend-templates-sandbox": "npm run pug -- resources/assets/template/backendPages/sandbox.pug --extension=html --out resources/static/build/backendPages --pretty",
+    "build-backend-templates": "npm run _build-backend-templates-index && npm run _build-backend-templates-login && npm run _build-backend-templates-pure && npm run _build-backend-templates-sandbox",
     "clean-build-backend-templates": "npm run clean-backend-templates && npm run build-backend-templates",
     "full-clean": "npm run clean-backend-templates && npm run clean",
     "prod-release": "npm i && npm run clean-build-backend-templates && npm run prod-clean-build",
     "webpack": "webpack",
-    "pug": "pug"
+    "pug": "pug",
+    "sandbox": "npm run build-backend-templates && npm run prod-build && http-server resources/static/build -o /backendPages/sandbox.html"
   },
   "repository": {
     "type": "git",
@@ -42,6 +44,7 @@
     "css-loader": "^4.2.0",
     "exports-loader": "^0.6.4",
     "file-loader": "^1.1.11",
+    "http-server": "^0.12.3",
     "imports-loader": "^0.7.1",
     "inject-loader": "^3.0.1",
     "json-loader": "^0.5.7",

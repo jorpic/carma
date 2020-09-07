@@ -1,0 +1,22 @@
+doctype html
+html(lang='ru')
+  head
+    meta(charset='utf-8')
+    title Тестирование компонентов
+    link(rel="stylesheet" type="text/css" href="/frontend/bundle.sandbox.css")
+  body
+    #top-navbar
+      nav.navbar.navbar-inverse.navbar-fixed-top(role="navigation")
+        .container-fluid
+          .navbar-header
+            a.navbar-brand(href='/')
+              CaRMa
+
+    #main-container
+      #layout
+        .row.screen
+          #left.col.col-md-4
+          #center.col.col-md-5
+          #right.col.col-md-3
+
+  script(src="/frontend/bundle.sandbox.js")
