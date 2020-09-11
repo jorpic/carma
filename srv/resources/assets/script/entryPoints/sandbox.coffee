@@ -5,7 +5,7 @@ require "carma-css"
 {h, render} = require "preact"
 
 data = -> require "carma/components/CaseHistory/test-data.json"
+
 component = h CaseHistory, {data}
-console.log component
 
 render component, document.getElementById("center")
