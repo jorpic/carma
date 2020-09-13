@@ -1,79 +1,19 @@
 import {h, FunctionalComponent} from "preact"
 import {Case} from './Case'
-import {CaseAction} from "./Case/CaseAction";
-import {CaseComment} from "./Case/CaseComment";
+import {HistoryItem} from '../types'
 
 type F<T> = FunctionalComponent<T>
 
-export type Data = [
-  string,
-  string,
-  {
-    caseid: number
-    userid: number
-    type: 'action' | 'comment' | 'partnerCancel' | 'call' | 'smsForPartner' | 'locationSharingResponse' | 'locationSharingRequest'
-    datetime: string
-    actioncomment?: string
-    commenttext?: string
-    actionresult?: string
-    actiontype?: string
-    servicelabel?: string
-    serviceid?: number
-    refusalcomment?: string
-    refusalreason?: string
-    partnername?: string
-    calltype?: string
-    deliverystatus?: string
-    msgtext?: string
-    phone?: string
-    mtime?: string
-    sender?: string
-    lat?: number
-    lon?: number
-    accuracy?: number
-    smsSent?: boolean
-    tasks?: {
-      isChecked: boolean
-      id: number
-      label: string
-    }[]
-  }
-]
-
 type Props = {
-  data: () => Data[]
+  caseHistory: () => HistoryItem[]
 }
 
-export const CaseHistory: F<Props> = ({data}) =>
+export const CaseHistory: F<Props> = ({caseHistory}) =>
   <section>
-    <Case>
-      {data().map(arr => {
-        switch (arr[2].type) {
-          case 'action':
-            return <CaseAction data={arr}/>
-
-          case 'comment':
-            return <CaseComment commenttext={arr[2].commenttext}/>
-
-          case 'partnerCancel':
-            return <div>partnerCancel</div>
-
-          case 'call':
-            return <div>call</div>
-
-          case 'smsForPartner':
-            return <div>smsForPartner</div>
-
-          case 'locationSharingResponse':
-            return <div>locationSharingResponse</div>
-
-          case 'locationSharingRequest':
-            return <div>locationSharingRequest</div>
-
-          default:
-            return <div>Error</div>
-        }
-      })}
-    </Case>
+    <h4 style='float: left'>История по кейсу</h4>
+    <div style='float: right'>иконки</div>
+    <div id='case-history'>
+      {caseHistory().map( data => <Case caseData={data}/>)}
+    </div>
   </section>
 

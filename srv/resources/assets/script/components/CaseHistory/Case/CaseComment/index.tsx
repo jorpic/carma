@@ -1,11 +1,12 @@
 import {h, FunctionalComponent} from 'preact'
+import {Comment} from '../../../types'
 
 type F<T> = FunctionalComponent<T>
 
 type Props = {
-  commenttext: string
+  action: Comment
 }
 
-export const CaseComment: F<Props> = ({commenttext}) => {
+export const CaseComment: F<Props> = ({action: {commenttext}}) => {
   return <div class='comment'><b>Комментарий: </b>{commenttext}</div>
 }

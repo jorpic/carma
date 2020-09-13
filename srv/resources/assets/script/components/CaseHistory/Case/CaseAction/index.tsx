@@ -1,47 +1,52 @@
 import {h, FunctionalComponent, Fragment} from 'preact'
-import {Data} from '../../../CaseHistory'
+import {Action} from '../../../types'
 
 type F<T> = FunctionalComponent<T>
 
 type Props = {
-  data: Data
+  action: Action
 }
 
-export const CaseAction: F<Props> = ({data}) => {
+export const CaseAction: F<Props> = ({action: {actioncomment, actionresult, actiontype, servicelabel, tasks}}) => {
 
   return (
     <div class='action'>
       <div>
         <i class='glyphicon glyphicon-briefcase'/>
-        <b>Действие:&nbsp;</b>
-        <span>{data[2].actiontype}</span>
+        <b>Действие:</b>
+        {`\xa0`}
+        {actiontype}
       </div>
       <div>
-        <b>Результат:&nbsp;</b>
-        <span>{data[2].actionresult}</span>
+        <b>Результат:</b>
+        {`\xa0`}
+        {actionresult}
       </div>
-      {data[2].servicelabel ?
+      {servicelabel &&
         <div>
-          <b>Услуга:&nbsp;</b>
-          <span>{data[2].servicelabel}</span>
-        </div> : null
+          <b>Услуга:</b>
+          {`\xa0`}
+          {servicelabel}
+        </div>
       }
-      {data[2].tasks ?
+      {tasks &&
         <div>
-          <b>Задачи:&nbsp;</b>
-          {data[2].tasks.forEach(({isChecked, label}) =>
+          <b>Задачи:</b>
+          {`\xa0`}
+          {tasks.map(({isChecked, label}) =>
             <Fragment>
               <input type='checkbox' disabled={isChecked}/>
-              <span>{label}</span>
+              {label}
             </Fragment>
           )}
-        </div> : null
+        </div>
       }
-      {data[2].actioncomment ?
+      {actioncomment &&
         <div>
-          <b>Комментарий:&nbsp;</b>
-          <span>{data[2].actioncomment}</span>
-        </div> : null
+          <b>Комментарий:</b>
+          {`\xa0`}
+          {actioncomment}
+        </div>
       }
     </div>
   )
