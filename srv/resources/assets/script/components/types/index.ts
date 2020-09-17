@@ -8,7 +8,7 @@ interface HasUser {
   userid: number
 }
 
-interface ActionTask {
+export interface ActionTask {
   isChecked: boolean
   id: number
   label: string
@@ -71,6 +71,8 @@ export interface CustomerFeedback extends Item, HasUser {
   type: 'customerFeedback'
   sender?: string
   accuracy?: number
+  commenttext: string
+  task?: ActionTask
 }
 
 interface Location {
@@ -85,6 +87,11 @@ interface RequestBody {
   location?: Location
 }
 
+interface Vehicle {
+  vin?: string
+  plateNumber?: string
+}
+
 export interface EraGlonassIncomingCallCard extends Item, HasUser {
   type: 'eraGlonassIncomingCallCard'
   id?: string
@@ -95,10 +102,14 @@ export interface EraGlonassIncomingCallCard extends Item, HasUser {
   fccComment?: string,
   deferTime?: string,
   phoneNumber?: string,
-  vehicle?: null,
+  vehicle?: Vehicle,
   ivsPhoneNumber?: null,
 }
-// я оставил null из-за того, что не знаю что за типы им присвоить(я поставил им string), и еще я не уверен, что задал правильные типы для свойст объекта/типа EraGlonassIncomingCallCard
+
+export interface Who extends Item, HasUser {
+  type: 'who'
+  who?: string
+}
 
 type Timestamp = string
 type UserName = string
@@ -113,6 +124,7 @@ type ItemData =
   | LocationSharingRequest
   | CustomerFeedback
   | EraGlonassIncomingCallCard
+  | Who
 export type HistoryItem = [Timestamp, UserName, ItemData]
 
 

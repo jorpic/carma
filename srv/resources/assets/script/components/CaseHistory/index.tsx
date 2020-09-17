@@ -13,7 +13,9 @@ export const CaseHistory: F<Props> = ({caseHistory}) =>
     <h4 style='float: left'>История по кейсу</h4>
     <div style='float: right'>иконки</div>
     <div id='case-history'>
+      <div className='well history-item'>
       {caseHistory().map( data => <Case caseData={data}/>)}
+      </div>
     </div>
   </section>
 
