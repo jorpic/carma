@@ -1,6 +1,7 @@
 import {h, FunctionalComponent} from "preact"
 import {Case} from './Case'
 import {HistoryItem} from '../types'
+import {HistoryItem} from './types'
 
 type F<T> = FunctionalComponent<T>
 

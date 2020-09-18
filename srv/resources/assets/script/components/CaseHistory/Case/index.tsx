@@ -1,79 +1,63 @@
 import {h, FunctionalComponent, Fragment} from 'preact'
-import {useMemo} from 'preact/hooks'
+import {useMemo, useRef} from 'preact/hooks'
 import moment from 'moment'
-import {
-  Action,
-  Call,
-  Comment,
-  HistoryItem,
-  LocationSharingRequest,
-  LocationSharingResponse,
-  PartnerCancel,
-  PartnerDelay,
-  SmsForPartner,
-  EraGlonassIncomingCallCard, CustomerFeedback, Who
-} from '../../types'
+import Type, {HistoryItem} from '../types'
 
-type F<T> = FunctionalComponent<T>
+type FC<T> = FunctionalComponent<T>
+type F<T> = FunctionalComponent<{data: T}>
 
 type Props = {
   caseData: HistoryItem
 }
 
-export const Case: F<Props> = ({caseData}) => {
+export const Case: FC<Props> = ({caseData}) => {
 
-  const [date, name, data] = caseData
+  const [date, who, data] = caseData
 
   const sortByTypeData = useMemo(() => {
-
     switch (data.type) {
-
-      case 'who': {
-        return <CaseWho action={data}/>
-      }
-
       case 'action': {
-        return <CaseAction action={data}/>
+        return <Action data={data}/>
       }
 
       case 'comment': {
-        return <CaseComment action={data}/>
+        return <Comment data={data}/>
       }
 
       case 'partnerDelay': {
-        return <CasePartnerDelay action={data}/>
+        return <PartnerDelay data={data}/>
       }
 
       case 'partnerCancel': {
-        return <CasePartnerCancel action={data}/>
+        return <PartnerCancel data={data}/>
       }
 
       case 'call': {
-        return <CaseCall action={data}/>
+        return <Call data={data}/>
       }
 
       case 'smsForPartner': {
-        return <CaseSmsForPartner action={data}/>
+        return <SmsForPartner data={data}/>
       }
 
       case 'locationSharingResponse': {
-        return <CaseLocationSharingResponse action={data}/>
+        return <LocationSharingResponse data={data}/>
       }
 
       case 'locationSharingRequest': {
-        return <CaseLocationSharingRequest action={data}/>
+        return <LocationSharingRequest data={data}/>
       }
 
       case 'customerFeedback': {
-        return <CaseCustomerFeedback action={data}/>
+        return <CustomerFeedback data={data}/>
       }
 
       case 'eraGlonassIncomingCallCard': {
-        return <CaseEraGlonassIncomingCallCard action={data}/>
+        return <EraGlonassIncomingCallCard data={data}/>
       }
 
       default:
-        return <div>Что етто за тип?</div>
+        return <div>0шибка 4О4</div>
     }
   }, [caseData])
 
@@ -81,7 +65,7 @@ export const Case: F<Props> = ({caseData}) => {
     <div class='history-body'>
       <div
         style='float: left'>{moment.utc(date).local().format('DD.MM.YYYY HH:mm:ss')}</div>
-      <div style='float: right'>{name}</div>
+      <div style='float: right'>{who}</div>
       &nbsp;
       {sortByTypeData}
     </div>
@@ -95,41 +79,40 @@ type PropsItem = {
   icon?: string
 }
 
-const CaseItem: F<PropsItem> = ({name, value, icon, children}) => {
+const NamedValueIcon: FC<PropsItem> = ({name, value, icon}) => {
   return (
     <div>
       {icon && <i class={`glyphicon glyphicon-${icon}`}/>}&nbsp;
       <b>{name}&nbsp;</b>
-      {/*for type === eraGlonassIncomingCallCard*/}
-      {children}
-      {/**/}
       {value}
     </div>
   )
 }
-//CaseWho
-type PropsWho = {
-  action: Who
-}
 
-const CaseWho: F<PropsWho> = ({action: {who}}) => {
+const NamedIcon: FC<PropsItem> = ({name, icon}) => {
   return (
-    <div class='history-who'>
-      <span>{who}</span>
+    <div>
+      {icon && <i class={`glyphicon glyphicon-${icon}`}/>}&nbsp;
+      <b>{name}&nbsp;</b>
     </div>
   )
 }
-//CaseAction
-type PropsAction = {
-  action: Action
+
+const NamedValue: FC<PropsItem> = ({name, value}) => {
+  return (
+    <div>
+      <b>{name}&nbsp;</b>
+      {value}
+    </div>
+  )
 }
 
-const CaseAction: F<PropsAction> = ({action: {actioncomment, actionresult, actiontype, servicelabel, tasks}}) => {
+const Action: F<Type.Action> = ({data: {actioncomment, actionresult, actiontype, servicelabel, tasks}}) => {
   return (
     <div class='action'>
-      <CaseItem name='Действие:' value={actiontype} icon='briefcase'/>
-      <CaseItem name='Результат:' value={actionresult}/>
-      {servicelabel && <CaseItem name='Услуга:' value={servicelabel}/>}
+      <NamedValueIcon name='Действие:' value={actiontype} icon='briefcase'/>
+      <NamedValue name='Результат:' value={actionresult}/>
+      {servicelabel && <NamedValue name='Услуга:' value={servicelabel}/>}
       {tasks &&
       <div>
         <b>Задачи:&nbsp;</b>
@@ -141,162 +124,113 @@ const CaseAction: F<PropsAction> = ({action: {actioncomment, actionresult, actio
         )}
       </div>
       }
-      {actioncomment && <CaseItem name='Комментарий:' value={actioncomment}/>}
+      {actioncomment && <NamedValue name='Комментарий:' value={actioncomment}/>}
     </div>
   )
 }
 
-//CaseCall
-type PropsCall = {
-  action: Call
-}
+const Call: F<Type.Call> = ({data: {calltype}}) =>
+  <NamedValueIcon name='Звонок:' value={calltype} icon='phone-alt'/>
 
-const CaseCall: F<PropsCall> = ({action: {calltype}}) => <CaseItem name='Звонок:' value={calltype} icon='phone-alt'/>
+const Comment: F<Type.Comment> = ({data: {commenttext}}) => <NamedValue name='Комментарий:' value={commenttext}/>
 
-//CaseComment
-type PropsComment = {
-  action: Comment
-}
-
-const CaseComment: F<PropsComment> = ({action: {commenttext}}) => <CaseItem name='Комментарий:' value={commenttext}/>
-
-//CaseCustomerFeedback
-type PropsCustomerFeedback = {
-  action: CustomerFeedback
-}
-
-const CaseCustomerFeedback: F<PropsCustomerFeedback> = ({action: {task, commenttext}}) => {
+const CustomerFeedback: F<Type.CustomerFeedback> = ({data: {task, commenttext}}) => {
   return (
     <Fragment>
-      <CaseItem name='Отзыв клиента:' value={task.label} icon='star'/>
-      <CaseItem name='Комментарий:' value={commenttext}/>
+      <NamedValueIcon name='Отзыв клиента:' value={task.label} icon='star'/>
+      <NamedValue name='Комментарий:' value={commenttext}/>
     </Fragment>
   )
 }
 
-//CaseLocationSharingRequest
-type PropsLocationSharingRequest = {
-  action: LocationSharingRequest
-}
+const LocationSharingRequest: F<Type.LocationSharingRequest> = () =>
+  <NamedIcon name='Клиенту отправлено SMS с запросом местоположения:' icon='map-marker'/>
 
-const CaseLocationSharingRequest: F<PropsLocationSharingRequest> = () =>
-  <CaseItem name='Клиенту отправлено SMS с запросом местоположения:' icon='map-marker'/>
-
-//CaseLocationSharingResponse
-type PropsLocationSharingResponse = {
-  action: LocationSharingResponse
-}
-
-const CaseLocationSharingResponse: F<PropsLocationSharingResponse> = ({action: {lat, lon,}}) => {
+const LocationSharingResponse: F<Type.LocationSharingResponse> = ({data: {lat, lon}}) => {
   const lonlat = `${lon.toPrecision(7)},${lat.toPrecision(7)}`
   const mapUrl = `https://maps.yandex.ru/?z=18&l=map&pt=${lonlat}`
+  const textAreaRef = useRef(null)
+
+  const copyToClipboard = e => {
+    textAreaRef.current.select();
+    document.execCommand('copy')
+    e.target.focus()
+  }
+
   return (
     <div>
-      <CaseItem name='От клиента пришёл ответ с координатами:'
-                icon='map-marker'/>
+      <NamedIcon name='От клиента пришёл ответ с координатами:' icon='map-marker'/>&nbsp;
       <a href={mapUrl} target='_blank'>{lonlat}</a>
       <div style='float: right'>
-        <a href='#' onClick={null}>Скопировать в буфер обмена</a>
+        <a href='#' onClick={copyToClipboard}>Скопировать в буфер обмена</a>
       </div>
+      <textarea style='position: fixed; top: -999px; left: -999px' ref={textAreaRef} value={mapUrl}/>
       <div style='clear:both'/>
     </div>
   )
 }
-//CasePartnerCancel
-type PropsPartnerCancel = {
-  action: PartnerCancel
-}
-
-const CasePartnerCancel: F<PropsPartnerCancel> = ({action: {refusalreason, refusalcomment, partnername}}) => {
+const PartnerCancel: F<Type.PartnerCancel> = ({data: {refusalreason, refusalcomment, partnername}}) => {
   return (
     <div>
-      <CaseItem name='Отказ партнёра:' value={partnername} icon='time'/>
+      <NamedValueIcon name='Отказ партнёра:' value={partnername} icon='time'/>
 
       <div>
-        <CaseItem name='Причина отказа:' value={refusalreason}/>
+        <NamedValue name='Причина отказа:' value={refusalreason}/>
         {refusalcomment && `\xa0${refusalcomment}`}
       </div>
     </div>
   )
 }
-//CasePartnerDelay
-type PropsPartnerDelay = {
-  action: PartnerDelay
-}
-
-const CasePartnerDelay: F<PropsPartnerDelay> = ({action: {delayconfirmed, delayminutes, partnername}}) => {
+const PartnerDelay: F<Type.PartnerDelay> = ({data: {delayconfirmed, delayminutes, partnername}}) => {
   return (
     <div>
-      <CaseItem name='Опоздание партнёра:' value={partnername} icon='time'/>
-      <CaseItem name='Время опоздания:' value={delayminutes}/>
-      <CaseItem name='Опоздание согласовано:' value={delayconfirmed}/>
+      <NamedValueIcon name='Опоздание партнёра:' value={partnername} icon='time'/>
+      <NamedValue name='Время опоздания:' value={delayminutes}/>
+      <NamedValue name='Опоздание согласовано:' value={delayconfirmed}/>
     </div>
   )
 }
-//CaseSmsForPartner
-type PropsSmsForPartner = {
-  action: SmsForPartner
-}
-
-const CaseSmsForPartner: F<PropsSmsForPartner> = ({action: {deliverystatus, msgtext, phone, mtime}}) => {
+const SmsForPartner: F<Type.SmsForPartner> = ({data: {deliverystatus, msgtext, phone, mtime}}) => {
   return (
     <div>
-      <CaseItem name='Партнёру отправлено SMS:' value={msgtext}
-                icon='envelope'/>
-      <CaseItem name='Телефон получателя:' value={phone}/>
-      <CaseItem name='Статус отправки:' value={deliverystatus}/>
+      <NamedValueIcon name='Партнёру отправлено SMS:' value={msgtext} icon='envelope'/>
+      <NamedValue name='Телефон получателя:' value={phone}/>
+      <NamedValue name='Статус отправки:' value={deliverystatus}/>
       <span>(обновлено: {mtime})</span>
     </div>
   )
 }
-//CaseEraGlonassIncomingCallCard
-type PropsEraGlonassIncomingCallCard = {
-  action: EraGlonassIncomingCallCard
-}
+const EraGlonassIncomingCallCard: F<Type.EraGlonassIncomingCallCard> = ({data: {requestBody, ivsPhoneNumber, phoneNumber, vehicle}}) => {
+  const toDegrees = x => (x / (3600 * 1000)).toLocaleString('ru-RU', {
+    minimumFractionDigits: 6,
+    maximumFractionDigits: 6,
+  }) + '°'
 
-const CaseItemItalic: F<PropsItem> = ({name, value}) => {
   return (
     <div>
-      <i>{name}</i>&nbsp;
-      <span>{value}</span>
+      <NamedIcon name='Поступление заявки на обслуживание от ЭРА-ГЛОНАСС.' icon='globe'/>
+      <NamedValue name='Идентификатор заявки на обслуживание:' value={requestBody.requestId}/>
+      <NamedValue name='Имя звонящего:' value={requestBody?.fullName || '✗'}/>
+      <NamedIcon name='Номера телефонов:' icon='earphone'/>
+      <ul>
+        <li>Терминала авто: {ivsPhoneNumber || '✗'}</li>
+        <li>Звонящий: {phoneNumber || '✗'}</li>
+      </ul>
+      <div>
+        <b>Транспорт:</b>
+        <ul>
+          <li>VIN: {vehicle?.vin || '✗'}</li>
+          <li>Регистрационный номер: {vehicle?.plateNumber || '✗'}</li>
+        </ul>
+      </div>
+      <NamedValue name='Описание местонахождения:' value={requestBody?.location?.description || '✗'}/>
+      <div>
+        <NamedIcon name='Координаты:' icon='screenshot'/>
+        <ul>
+          <li><b>Широта</b> {toDegrees(requestBody?.location?.latitude)}</li>
+          <li><b>Долгота</b> {toDegrees(requestBody?.location?.longitude)}</li>
+        </ul>
+      </div>
     </div>
   )
 }
-
-const CaseEraGlonassIncomingCallCard: F<PropsEraGlonassIncomingCallCard> =
-  ({action: {requestBody, ivsPhoneNumber, phoneNumber, vehicle}}) => {
-    return (
-      <div>
-        <CaseItem name='Поступление заявки на обслуживание от ЭРА-ГЛОНАСС.'
-                  icon='globe'/>
-        <CaseItem name='Идентификатор заявки на обслуживание:'
-                  value={requestBody.requestId}/>
-        <CaseItem name='Имя звонящего:' value={requestBody?.fullName || '✗'}/>
-        <CaseItem name='Номера телефонов:' icon='earphone'>
-          <CaseItemItalic name='Терминала авто:' value={ivsPhoneNumber || '✗'}/>
-          <CaseItemItalic name='Звонящий:' value={phoneNumber || '✗'}/>
-        </CaseItem>
-        <CaseItem name='Транспорт:'>
-          <CaseItemItalic name='VIN:' value={vehicle?.vin || '✗'}/>
-          <CaseItemItalic name='Регистрационный номер:'
-                          value={vehicle?.plateNumber || '✗'}/>
-        </CaseItem>
-        <CaseItem name='Описание местонахождения:'
-                  value={requestBody?.location?.description || '✗'}/>
-        <CaseItem name='Координаты:' icon='screenshot'>
-
-          <CaseItemItalic name='Широта'
-                          value={(requestBody?.location?.latitude / (3600 * 1000)).toLocaleString('ru-RU', {
-                            minimumFractionDigits: 6,
-                            maximumFractionDigits: 6,
-                          }) + '°'}/>
-
-          <CaseItemItalic name='Долгота'
-                          value={(requestBody?.location?.longitude / (3600 * 1000)).toLocaleString('ru-RU', {
-                            minimumFractionDigits: 6,
-                            maximumFractionDigits: 6,
-                          }) + '°'}/>
-        </CaseItem>
-      </div>
-    )
-  }
