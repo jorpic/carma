@@ -30,7 +30,7 @@ const filterSpec: BtnSpec[] = [
   { key: 'eraGlonassIncomingCallCard',
     name: 'Показать поступления «Карточек Вызова» ЭРА-ГЛОНАСС',
     icon: 'globe' },
-  { key: 'locationSharingResponse',
+  { key: 'locationSharing',
     name: 'Показать запросы на определение координат',
     icon: 'map-marker' },
   { key: 'customerFeedback',
@@ -50,7 +50,10 @@ export const CaseHistory: FunctionalComponent<Props> = ({caseHistory}) => {
   }
 
   const filteredCaseHistory = caseHistory()
-    .filter(([_time, _user, {type}]) => typeFilter.has(type))
+    .filter(([_time, _user, {type}]) =>
+      (type === 'avayaEvent' && typeFilter.has('call'))
+      || (type.startsWith('locationSharing') && typeFilter.has('locationSharing'))
+      || typeFilter.has(type))
 
   return (
     <div id='case-history'>
