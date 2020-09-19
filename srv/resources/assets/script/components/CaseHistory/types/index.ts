@@ -102,6 +102,13 @@ export interface EraGlonassIncomingCallCard extends Item, HasUser {
   requestBody: RequestBody
 }
 
+export interface AvayaEvent extends Item, HasUser {
+  type: 'avayaEvent'
+  aetype: string
+  aeinterlocutors: string
+  aecall: number
+}
+
 type Timestamp = string
 type UserName = string
 type ItemData =

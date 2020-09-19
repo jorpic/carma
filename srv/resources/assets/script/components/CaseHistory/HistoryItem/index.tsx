@@ -93,13 +93,20 @@ const components: {[type: string]: any} = {
     </Fragment>,
 
 
-    smsForPartner: ({deliverystatus, msgtext, phone, mtime}: Type.SmsForPartner) =>
+  smsForPartner: ({deliverystatus, msgtext, phone, mtime}: Type.SmsForPartner) =>
     <Fragment>
       <NamedValue name='Партнёру отправлено SMS' value={msgtext} icon='envelope'/>
       <NamedValue name='Телефон получателя' value={phone}/>
       <NamedValue
         name='Статус отправки'
         value={`${deliverystatus} (обновлено: ${mtime})`}/>
+    </Fragment>,
+
+  avayaEvent: ({aetype, aeinterlocutors, aecall}: Type.AvayaEvent) =>
+    <Fragment>
+      <NamedValue name='Событие AVAYA' value={aetype} icon='earphone'/>
+      <NamedValue name='Второй абонент' value={aeinterlocutors}/>
+      <NamedValue name='Идентификатор звонка' value={aecall}/>
     </Fragment>,
 
   eraGlonassIncomingCallCard: ({requestId, requestBody: rq}: Type.EraGlonassIncomingCallCard) => {
