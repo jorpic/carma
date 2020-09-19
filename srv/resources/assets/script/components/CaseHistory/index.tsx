@@ -11,28 +11,21 @@ type Props = {
 }
 
 export const CaseHistory: F<Props> = ({caseHistory}) => {
-  const [type, setType] = useState<string>('')
-  const typeFilter = new Set(['comment'])
-
-  const typeAdd = (type: string) => {
-    typeFilter.add(type)
-    setType('')
+  const [typeFilter, setTypeFilter] = useState<Set<string>>(new Set())
+  const toggleFilter = (key: string) => {
+    // FIXME: Good use case for immutable data structures like `immutable.js`.
+    typeFilter.has(key) ? typeFilter.delete(key) : typeFilter.add(key)
+    setTypeFilter(new Set(typeFilter))
   }
-  const typeDelete = (type: string) => {
-    typeFilter.delete(type)
-    setType('')
-  }
-  useEffect(() => {
-    !!type && typeFilter.has(type) ? typeDelete(type) : typeAdd(type)
-  }, [type])
 
-  const filteredCaseHistory = caseHistory() && caseHistory().filter(x => typeFilter.has(x[2].type))
-  
+  const filteredCaseHistory = caseHistory()
+    .filter(([_time, _user, {type}]) => typeFilter.has(type))
+
   return (
     <section>
       <h4 style='float: left'> История по кейсу</h4>
       <div style='float: right'>
-        <Filter onChange={setType}/>
+        <Filter onChange={toggleFilter}/>
       </div>
       <div id='case-history'>
         <div className='well history-item'>
