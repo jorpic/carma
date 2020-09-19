@@ -26,7 +26,7 @@
     "prod-release": "npm i && npm run clean-build-backend-templates && npm run prod-clean-build",
     "webpack": "webpack",
     "pug": "pug",
-    "sandbox": "npm run build-backend-templates && npm run prod-build && http-server resources/static/build -o /backendPages/sandbox.html"
+    "sandbox": "http-server resources/static -o /s/backendPages/sandbox.html"
   },
   "repository": {
     "type": "git",
