@@ -49,10 +49,10 @@ const components: {[type: string]: any} = {
   call: ({calltype}: Type.Call) =>
     <NamedValue name='Звонок' value={calltype} icon='phone-alt'/>,
 
-  customerFeedback: ({task, commenttext}: Type.CustomerFeedback) =>
+  customerFeedback: ({label, comment}: Type.CustomerFeedback) =>
     <Fragment>
-      <NamedValue name='Отзыв клиента' value={task.label} icon='star'/>
-      <NamedValue name='Комментарий' value={commenttext}/>
+      <NamedValue name='Отзыв клиента' value={label} icon='star'/>
+      <NamedValue name='Комментарий' value={comment}/>
     </Fragment>,
 
   locationSharingRequest: () =>
@@ -102,40 +102,34 @@ const components: {[type: string]: any} = {
         value={`${deliverystatus} (обновлено: ${mtime})`}/>
     </Fragment>,
 
-  eraGlonassIncomingCallCard: ({requestBody, ivsPhoneNumber, phoneNumber, vehicle}: Type.EraGlonassIncomingCallCard) => {
+  eraGlonassIncomingCallCard: ({requestId, requestBody: rq}: Type.EraGlonassIncomingCallCard) => {
     return (
       <div>
         <NamedIcon
           name='Поступление заявки на обслуживание от ЭРА-ГЛОНАСС.'
           icon='globe'/>
-        <NamedValue name='Идентификатор заявки на обслуживание' value={requestBody?.requestId}/>
-        <NamedValue name='Имя звонящего' value={requestBody?.fullName || '✗'}/>
+        <NamedValue name='Идентификатор заявки на обслуживание' value={requestId}/>
+        <NamedValue name='Имя звонящего' value={rq?.fullName || '✗'}/>
         <NamedIcon name='Номера телефонов:' icon='earphone'/>
         <ul>
-          <li>Терминал авто: {ivsPhoneNumber || '✗'}</li>
-          <li>Звонящий: {phoneNumber || '✗'}</li>
+          <li>Терминал авто: {rq?.ivsPhoneNumber || '✗'}</li>
+          <li>Звонящий: {rq?.phoneNumber || '✗'}</li>
         </ul>
         <div>
           <b>Транспорт:</b>
           <ul>
-            <li>VIN: {vehicle?.vin || '✗'}</li>
-            <li>Регистрационный номер: {vehicle?.plateNumber || '✗'}</li>
+            <li>VIN: {rq?.vehicle?.vin || '✗'}</li>
+            <li>Регистрационный номер: {rq?.vehicle?.plateNumber || '✗'}</li>
           </ul>
         </div>
         <NamedValue
-          name='Описание местонахождения:'
-          value={requestBody?.location?.description || '✗'}/>
+          name='Описание местонахождения'
+          value={rq?.location?.description || '✗'}/>
         <div>
           <NamedIcon name='Координаты:' icon='screenshot'/>
           <ul>
-            <li>
-              <b>Широта</b>
-              {toDegrees(requestBody?.location?.latitude)}
-            </li>
-            <li>
-              <b>Долгота</b>
-              {toDegrees(requestBody?.location?.longitude)}
-            </li>
+            <li><b>Широта</b>{toDegrees(rq?.location?.latitude)}</li>
+            <li><b>Долгота</b>{toDegrees(rq?.location?.longitude)}</li>
           </ul>
         </div>
       </div>
@@ -154,7 +148,7 @@ const toDegrees = x => (x / (3600 * 1000)).toLocaleString('ru-RU', {
 
 type PropsItem = {
   name: string
-  value?: string
+  value?: any
   icon?: string
 }
 

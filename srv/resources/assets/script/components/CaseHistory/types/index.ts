@@ -15,27 +15,29 @@ interface ActionTask {
 }
 
 interface Location {
-  latitude?: number,
-  longitude?: number,
-  description?: string
+  latitude: number,
+  longitude: number,
+  description: string | null
 }
 
 interface RequestBody {
-  fullName?: string
-  requestId?: string
-  location?: Location
+  fullName: string | null
+  ivsPhoneNumber: string | null
+  phoneNumber: string | null
+  vehicle: Vehicle | null
+  location: Location | null
 }
 
 interface Vehicle {
-  vin?: string
-  plateNumber?: string
+  vin: string | null
+  plateNumber: string | null
 }
 
 export interface Action extends Item, HasUser {
   type: 'action'
   actiontype: string
-  actionresult?: string
-  actioncomment?: string
+  actionresult: string
+  actioncomment: string
   serviceid?: number
   servicelabel?: string
   tasks?: ActionTask[]
@@ -43,68 +45,61 @@ export interface Action extends Item, HasUser {
 
 export interface Call extends Item, HasUser {
   type: 'call'
-  calltype?: string
+  calltype: string
 }
 
 export interface Comment extends Item, HasUser {
   type: 'comment'
-  commenttext?: string
+  commenttext: string
 }
 
 export interface PartnerCancel extends Item, HasUser {
   type: 'partnerCancel'
-  partnername?: string
-  refusalcomment?: string
-  refusalreason?: string
+  partnername: string
+  refusalcomment: string
+  refusalreason: string
 }
 
 export interface PartnerDelay extends Item, HasUser {
   type: 'partnerDelay'
-  partnername?: string
-  delayminutes?: string
-  delayconfirmed?: string
+  serviceid: number
+  servicelabel: string
+  partnername: string
+  delayminutes: string
+  delayconfirmed: string
 }
 
 export interface SmsForPartner extends Item, HasUser {
   type: 'smsForPartner'
-  deliverystatus?: string
-  msgtext?: string
-  phone?: string
-  mtime?: string
+  deliverystatus: string
+  msgtext: string
+  phone: string
+  mtime: string | null
 }
 
 export interface LocationSharingResponse extends Item, HasUser {
   type: 'locationSharingResponse'
-  lat?: number
-  lon?: number
+  lat: number
+  lon: number
+  accuracy: number
 }
 
 export interface LocationSharingRequest extends Item, HasUser {
   type: 'locationSharingRequest'
-  smsSent?: boolean
+  smsSent: boolean
 }
 
 export interface CustomerFeedback extends Item, HasUser {
   type: 'customerFeedback'
-  sender?: string
-  accuracy?: number
-  commenttext: string
-  task?: ActionTask
+  value: number
+  label: string
+  comment: string
 }
-
 
 export interface EraGlonassIncomingCallCard extends Item, HasUser {
   type: 'eraGlonassIncomingCallCard'
-  id?: string
-  requestBody?: RequestBody
-  statusTime?: string,
-  statusCode?: string
-  serviceCategoryId?: string
-  fccComment?: string,
-  deferTime?: string,
-  phoneNumber?: string,
-  vehicle?: Vehicle,
-  ivsPhoneNumber?: null,
+  requestId: number
+  requestBody: RequestBody
 }
 
 type Timestamp = string
@@ -120,4 +115,5 @@ type ItemData =
   | LocationSharingRequest
   | CustomerFeedback
   | EraGlonassIncomingCallCard
+
 export type HistoryItem = [Timestamp, UserName, ItemData]
