@@ -2,10 +2,7 @@ interface Item {
   caseId: number
   type: string
   datetime: string
-}
-
-interface HasUser {
-  userid: number
+  userid?: number
 }
 
 interface ActionTask {
@@ -33,7 +30,7 @@ interface Vehicle {
   plateNumber: string | null
 }
 
-export interface Action extends Item, HasUser {
+export interface Action extends Item {
   type: 'action'
   actiontype: string
   actionresult: string
@@ -43,24 +40,24 @@ export interface Action extends Item, HasUser {
   tasks?: ActionTask[]
 }
 
-export interface Call extends Item, HasUser {
+export interface Call extends Item {
   type: 'call'
   calltype: string
 }
 
-export interface Comment extends Item, HasUser {
+export interface Comment extends Item {
   type: 'comment'
   commenttext: string
 }
 
-export interface PartnerCancel extends Item, HasUser {
+export interface PartnerCancel extends Item {
   type: 'partnerCancel'
   partnername: string
   refusalcomment: string
   refusalreason: string
 }
 
-export interface PartnerDelay extends Item, HasUser {
+export interface PartnerDelay extends Item {
   type: 'partnerDelay'
   serviceid: number
   servicelabel: string
@@ -69,7 +66,7 @@ export interface PartnerDelay extends Item, HasUser {
   delayconfirmed: string
 }
 
-export interface SmsForPartner extends Item, HasUser {
+export interface SmsForPartner extends Item {
   type: 'smsForPartner'
   deliverystatus: string
   msgtext: string
@@ -77,32 +74,32 @@ export interface SmsForPartner extends Item, HasUser {
   mtime: string | null
 }
 
-export interface LocationSharingResponse extends Item, HasUser {
+export interface LocationSharingResponse extends Item {
   type: 'locationSharingResponse'
   lat: number
   lon: number
   accuracy: number
 }
 
-export interface LocationSharingRequest extends Item, HasUser {
+export interface LocationSharingRequest extends Item {
   type: 'locationSharingRequest'
   smsSent: boolean
 }
 
-export interface CustomerFeedback extends Item, HasUser {
+export interface CustomerFeedback extends Item {
   type: 'customerFeedback'
   value: number
   label: string
   comment: string
 }
 
-export interface EraGlonassIncomingCallCard extends Item, HasUser {
+export interface EraGlonassIncomingCallCard extends Item {
   type: 'eraGlonassIncomingCallCard'
   requestId: number
   requestBody: RequestBody
 }
 
-export interface AvayaEvent extends Item, HasUser {
+export interface AvayaEvent extends Item {
   type: 'avayaEvent'
   aetype: string
   aeinterlocutors: string
