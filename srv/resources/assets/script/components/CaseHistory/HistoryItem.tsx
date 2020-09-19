@@ -1,7 +1,7 @@
 import {h, FunctionalComponent, Fragment} from 'preact'
 import {useRef} from 'preact/hooks'
 import moment from 'moment'
-import * as Type from '../types'
+import * as Type from './types'
 
 type FC<T> = FunctionalComponent<T>
 
