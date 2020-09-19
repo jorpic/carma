@@ -1,8 +1,8 @@
 import {h, FunctionalComponent} from 'preact'
-import {HistoryItem} from './HistoryItem'
-import * as Type from './types'
-import {BtnGroup, BtnSpec} from './BtnGroup'
 import {useState} from 'preact/hooks'
+import * as Type from './types'
+import {HistoryItem} from './HistoryItem'
+import {BtnGroup, BtnSpec} from './BtnGroup'
 
 type Props = {
   caseHistory: () => Type.HistoryItem[]
@@ -53,7 +53,7 @@ export const CaseHistory: FunctionalComponent<Props> = ({caseHistory}) => {
     .filter(([_time, _user, {type}]) => typeFilter.has(type))
 
   return (
-    <section>
+    <div id='case-history'>
       <h4 style='float: left'> История по кейсу</h4>
       <div style='float: right'>
         <BtnGroup
@@ -61,11 +61,9 @@ export const CaseHistory: FunctionalComponent<Props> = ({caseHistory}) => {
           activeButtons={typeFilter}
           onChange={toggleFilter}/>
       </div>
-      <div id='case-history'>
-        <div className='well history-item'>
-          {filteredCaseHistory.map(i => <HistoryItem data={i}/>)}
-        </div>
-      </div>
-    </section>
+      <div style="clear:both"/>
+      {filteredCaseHistory.map(i => <HistoryItem data={i}/>)}
+      <a class='more' href='#'>Ещё</a>
+    </div>
   )
 }
