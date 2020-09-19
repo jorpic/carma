@@ -40,6 +40,13 @@ export interface Action extends Item {
   tasks?: ActionTask[]
 }
 
+export interface AvayaEvent extends Item {
+  type: 'avayaEvent'
+  aetype: string
+  aeinterlocutors: string
+  aecall: number
+}
+
 export interface Call extends Item {
   type: 'call'
   calltype: string
@@ -99,17 +106,12 @@ export interface EraGlonassIncomingCallCard extends Item {
   requestBody: RequestBody
 }
 
-export interface AvayaEvent extends Item {
-  type: 'avayaEvent'
-  aetype: string
-  aeinterlocutors: string
-  aecall: number
-}
 
 type Timestamp = string
 type UserName = string
 type ItemData =
     Action
+  | AvayaEvent
   | Call
   | Comment
   | PartnerCancel
