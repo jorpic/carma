@@ -1,11 +1,11 @@
 import {h, FunctionalComponent} from 'preact'
-import {Case} from './Case'
-import {HistoryItem} from './types'
+import {HistoryItem} from './HistoryItem'
+import * as Type from './types'
 import {BtnGroup, BtnSpec} from './BtnGroup'
 import {useState} from 'preact/hooks'
 
 type Props = {
-  caseHistory: () => HistoryItem[]
+  caseHistory: () => Type.HistoryItem[]
 }
 
 const filterSpec: BtnSpec[] = [
@@ -63,7 +63,7 @@ export const CaseHistory: FunctionalComponent<Props> = ({caseHistory}) => {
       </div>
       <div id='case-history'>
         <div className='well history-item'>
-          {filteredCaseHistory.map(data => <Case caseData={data}/>)}
+          {filteredCaseHistory.map(i => <HistoryItem data={i}/>)}
         </div>
       </div>
     </section>
