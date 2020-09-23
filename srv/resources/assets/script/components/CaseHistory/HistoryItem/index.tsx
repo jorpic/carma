@@ -1,18 +1,14 @@
 import {h, FunctionalComponent, Fragment} from 'preact'
 import {useMemo, useRef} from 'preact/hooks'
 import moment from 'moment'
-import Type, {HistoryItem} from '../types'
+import * as Type from '../types'
 
 type FC<T> = FunctionalComponent<T>
-type F<T> = FunctionalComponent<{data: T}>
 
 type Props = {
-  caseData: HistoryItem
+  historyData: Type.HistoryItem
 }
 
-export const Case: FC<Props> = ({caseData}) => {
-
-  const [date, who, data] = caseData
 
   const sortByTypeData = useMemo(() => {
     switch (data.type) {
@@ -23,6 +19,7 @@ export const Case: FC<Props> = ({caseData}) => {
       case 'comment': {
         return <Comment data={data}/>
       }
+export const HistoryItem: FC<Props> = ({historyData: [date, who, data]}) =>
 
       case 'partnerDelay': {
         return <PartnerDelay data={data}/>

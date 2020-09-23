@@ -1,13 +1,13 @@
 import {h, FunctionalComponent} from 'preact'
-import {Case} from './Case'
-import {HistoryItem} from './types'
 import {Filter} from './Filter'
 import {useEffect, useMemo, useState} from 'preact/hooks'
+import {HistoryItem} from './HistoryItem'
+import * as Type from './types'
 
 type F<T> = FunctionalComponent<T>
 
 type Props = {
-  caseHistory: () => HistoryItem[]
+  caseHistory: () => Type.HistoryItem[]
 }
 
 export const CaseHistory: F<Props> = ({caseHistory}) => {
