@@ -1,7 +1,9 @@
 import {h, FunctionalComponent, Fragment} from 'preact'
 import {useRef} from 'preact/hooks'
 import moment from 'moment'
+import utils  from 'carma/utils'
 import * as Type from './types'
+
 
 type FC<T> = FunctionalComponent<T>
 
@@ -9,11 +11,10 @@ type Props = {
   data: Type.HistoryItem
 }
 
+
 export const HistoryItem: FC<Props> = ({data: [date, who, data]}) =>
   <div className='well history-item'>
-    <div class='history-datetime'>
-      {moment.utc(date).local().format('DD.MM.YYYY HH:mm:ss')}
-    </div>
+    <div class='history-datetime'>{toTimestamp(date)}</div>
     {who && <div class='history-who'>{who}</div>}
     <div class='history-body'>
     </div>
@@ -22,6 +23,7 @@ export const HistoryItem: FC<Props> = ({data: [date, who, data]}) =>
       : (data.type || '--')
     }
   </div>
+
 
 const components: {[type: string]: any} = {
   action: ({actioncomment, actionresult, actiontype, servicelabel, tasks}: Type.Action) =>
@@ -92,14 +94,13 @@ const components: {[type: string]: any} = {
       <NamedValue name='Опоздание согласовано' value={delayconfirmed}/>
     </Fragment>,
 
-
   smsForPartner: ({deliverystatus, msgtext, phone, mtime}: Type.SmsForPartner) =>
     <Fragment>
       <NamedValue name='Партнёру отправлено SMS' value={msgtext} icon='envelope'/>
       <NamedValue name='Телефон получателя' value={phone}/>
       <NamedValue
         name='Статус отправки'
-        value={`${deliverystatus} (обновлено: ${mtime})`}/>
+        value={`${deliverystatus} (обновлено: ${toTimestamp(mtime)})`}/>
     </Fragment>,
 
   avayaEvent: ({aetype, aeinterlocutors, aecall}: Type.AvayaEvent) =>
@@ -147,6 +148,10 @@ const components: {[type: string]: any} = {
 
 // Helper functions and components
 
+const toTimestamp = (date) =>
+  moment.utc(date).local().format('DD.MM.YYYY HH:mm:ss')
+
+
 const toDegrees = x => (x / (3600 * 1000)).toLocaleString('ru-RU', {
   minimumFractionDigits: 6,
   maximumFractionDigits: 6,
@@ -166,6 +171,7 @@ const NamedIcon: FC<PropsItem> = ({name, icon}) =>
     <b>{name}</b>
   </div>
 
+
 const NamedValue: FC<PropsItem> = ({name, value, icon}) =>
   value && (
     <div>
@@ -176,6 +182,7 @@ const NamedValue: FC<PropsItem> = ({name, value, icon}) =>
   )
 
 
+// see https://stackoverflow.com/questions/400212
 const CopyBtn: FC<{value: string}> = ({value, children}) => {
   const textAreaRef = useRef(null)
 
@@ -188,7 +195,7 @@ const CopyBtn: FC<{value: string}> = ({value, children}) => {
 
   return (
     <Fragment>
-      <a href='#' onClick={copyToClipboard}>Скопировать в буфер обмена</a>
+      <a href='#' onClick={copyToClipboard}>{children}</a>
       <textarea
         style='position: fixed; top: -999px; left: -999px'
         ref={textAreaRef}

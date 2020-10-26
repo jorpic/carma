@@ -38,7 +38,7 @@ const filterSpec: BtnSpec[] = [
     icon: 'star' }
 ]
 
-export const CaseHistory: FunctionalComponent<Props> = ({caseHistory}) => {
+export default const CaseHistory: FunctionalComponent<Props> = ({caseHistory}) => {
   const [typeFilter, setTypeFilter] = useState<Set<string>>(
     // All type filters are active by default
     new Set(filterSpec.map(f => f.key))
@@ -57,7 +57,7 @@ export const CaseHistory: FunctionalComponent<Props> = ({caseHistory}) => {
 
   return (
     <div id='case-history'>
-      <h4 style='float: left'> История по кейсу</h4>
+      <h4 style='float: left'>История кейса</h4>
       <div style='float: right'>
         <BtnGroup
           buttons={filterSpec}

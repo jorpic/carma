@@ -1,7 +1,7 @@
 require "carma/vendor"
 require "carma-css"
 
-{CaseHistory} = require "carma/components/CaseHistory"
+CaseHistory = require "carma/components/CaseHistory"
 {h, render} = require "preact"
 
 caseHistory = -> require "carma/components/CaseHistory/test-data.json"
